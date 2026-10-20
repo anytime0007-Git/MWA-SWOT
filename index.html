@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>กระดาน SWOT องค์กรประปา</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+/* Layout: ภายในองค์กร (S, W) เหนือ ภายนอกองค์กร (O, T); แท็บ กระดาน / เสนอใหม่ / สรุป / ตรวจ (ผู้ดูแล) */
+:root{
+  --bg:#EEF3F6; --surface:#FFFFFF; --surface2:#E4ECF1; --ink:#0D2733; --muted:#4D6472; --line:#C7D5DD; --label:#5B7482; --ans-bg:#F1F7FA; --ans-bar:#1F7A99;
+  --accent:#0A5F8F; --accent-ink:#FFFFFF; --focus:#0A5F8F; --on-type:#FFFFFF;
+  --s:#0F7A5C; --s-bg:#DCF1E9; --w:#A25800; --w-bg:#FBEACF; --o:#1D5FC4; --o-bg:#DCE8FA; --t:#B3262F; --t-bg:#FADFE1;
+  --font-display:"Anuphan","IBM Plex Sans Thai","Noto Sans Thai",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans Thai","Noto Sans Thai",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0B1820; --surface:#12242E; --surface2:#182F3B; --ink:#E4EFF4; --muted:#94ABB8; --line:#2A4452; --label:#8FA9B7; --ans-bg:#0F202A; --ans-bar:#4FB3D1;
+    --accent:#5BB4E5; --accent-ink:#06202D; --focus:#5BB4E5; --on-type:#0B1820;
+    --s:#4FD1A5; --s-bg:#123A30; --w:#F0A94A; --w-bg:#3A2A10; --o:#82B1F4; --o-bg:#172E50; --t:#F2848B; --t-bg:#451C20;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.65}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+[hidden]{display:none!important}
+.app{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+
+.top{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:flex-end;padding-bottom:16px}
+.top>div{min-width:0}
+.eyebrow{margin:0 0 4px;font-size:.82rem;color:var(--muted);letter-spacing:.02em}
+h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(1.45rem,4.2vw,2rem);line-height:1.25;text-wrap:balance}
+.lede{margin:6px 0 0;color:var(--muted);max-width:62ch}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.live{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:.85rem}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none}
+.live.on .dot{background:var(--s);animation:pulse 2s ease-in-out infinite}
+.live.err .dot{background:var(--t)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--s) 55%,transparent)}50%{box-shadow:0 0 0 6px transparent}}
+@media (prefers-reduced-motion:reduce){.live.on .dot{animation:none}}
+.linkbtn{appearance:none;background:none;border:0;padding:2px 0;cursor:pointer;color:var(--accent);font-size:.85rem;text-decoration:underline;text-underline-offset:3px}
+
+.banner{margin:0 0 16px;padding:12px 16px;border-radius:10px;background:var(--w-bg);border:1px solid var(--w)}
+.banner b{display:block}
+#adminBox{margin-bottom:16px;max-width:520px}
+#adminBox form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+#adminBox .field{flex:1 1 200px}
+.msg{font-size:.88rem;color:var(--t);margin:6px 0 0}
+
+.tabs{display:flex;gap:8px;margin-bottom:18px;padding:2px 2px 8px;overflow-x:auto}
+.tab{appearance:none;background:var(--surface);border:1.5px solid var(--accent);border-radius:999px;padding:9px 20px;cursor:pointer;color:var(--accent);font-weight:600;white-space:nowrap;box-shadow:0 1px 3px rgba(13,39,51,.12);transition:background .15s,color .15s,transform .1s}
+.tab:hover{background:var(--surface2);transform:translateY(-1px)}
+.tab:active{transform:translateY(0)}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:none;transform:none}
+@media (max-width:480px){.tabs{gap:6px}.tab{padding:8px 12px;font-size:.92rem}}
+.pill{display:inline-block;min-width:20px;padding:0 6px;border-radius:999px;background:var(--t);color:var(--on-type);font-size:.75rem;font-weight:700;line-height:1.5;text-align:center;margin-left:6px}
+
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:20px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field>label,legend{font-size:.85rem;font-weight:600}
+.hint{font-size:.82rem;color:var(--muted);font-weight:400}
+input[type=text],input[type=password],select,textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 11px;min-width:0}
+textarea{resize:vertical;min-height:84px}
+input::placeholder,textarea::placeholder{color:var(--muted);opacity:.85}
+
+.group{margin-bottom:22px}
+.group-label{display:flex;align-items:center;gap:12px;margin:0 0 10px;font-size:.88rem;font-weight:600;color:var(--muted)}
+.group-label::after{content:"";flex:1;height:1px;background:var(--line)}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px}
+.quad{background:var(--surface2);border-radius:12px;padding:12px;min-width:0}
+.quad-head{display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:center;margin-bottom:12px}
+.badge{grid-row:span 2;width:42px;height:42px;border-radius:9px;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:1.4rem;color:var(--on-type)}
+.q-S .badge{background:var(--s)}.q-W .badge{background:var(--w)}.q-O .badge{background:var(--o)}.q-T .badge{background:var(--t)}
+.quad-name{font-family:var(--font-display);font-weight:600;font-size:1.08rem;line-height:1.3}
+.quad-name small{font-family:var(--font-body);font-weight:400;color:var(--muted);font-size:.8rem;margin-left:6px}
+.count{font-variant-numeric:tabular-nums;background:var(--surface);border-radius:999px;padding:1px 10px;font-weight:600;font-size:.88rem}
+.quad-ask{grid-column:2/4;margin:0;font-size:.83rem;color:var(--muted);line-height:1.5}
+.list{display:grid;gap:10px}
+.empty{padding:16px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:.9rem;background:var(--surface)}
+.empty button{margin-top:8px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 14px;display:flex;flex-direction:column;gap:8px;min-width:0;overflow-wrap:anywhere}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.8rem;color:var(--muted)}
+.chip{display:inline-block;border-radius:6px;padding:0 8px;font-weight:700;font-size:.8rem;line-height:1.7}
+.t-S{background:var(--s-bg);color:var(--s)}.t-W{background:var(--w-bg);color:var(--w)}.t-O{background:var(--o-bg);color:var(--o)}.t-T{background:var(--t-bg);color:var(--t)}
+.card-title{margin:0;font-family:var(--font-display);font-weight:600;font-size:1.02rem;line-height:1.4}
+.card-title.clickable{cursor:pointer}
+.card-title.clickable:hover{color:var(--accent)}
+.meta{margin:0;font-size:.82rem;color:var(--muted)}
+.sug{margin:0}
+.lbl{display:inline-block;font-size:.76rem;font-weight:500;color:var(--label);background:var(--surface2);border-radius:4px;padding:0 6px;margin-right:6px;letter-spacing:.01em}
+.more summary{cursor:pointer;color:var(--accent);font-size:.88rem;font-weight:500}
+.more dl{margin:8px 0 0;display:grid;gap:2px}
+.more dt{font-size:.76rem;color:var(--label);font-weight:500;margin-top:8px;letter-spacing:.01em}
+.more dt::before{content:"\25B8  "}
+.more dd{margin:0;white-space:pre-wrap;color:var(--ink);font-size:1rem;font-weight:400;background:var(--ans-bg);border-left:3px solid var(--ans-bar);border-radius:0 6px 6px 0;padding:6px 10px}
+.vote{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding-top:8px;border-top:1px solid var(--line)}
+.vote-lbl{font-size:.82rem;font-weight:600}
+.scale{display:flex;gap:4px}
+.sc{appearance:none;width:32px;height:32px;border-radius:7px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-variant-numeric:tabular-nums;font-weight:600}
+.sc:hover:not(:disabled){border-color:var(--accent)}
+.sc.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.sc:disabled{opacity:.45;cursor:not-allowed}
+.avg{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.82rem}
+.tools select{width:auto;padding:4px 8px;font-size:.82rem}
+
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:500}
+.btn:hover:not(:disabled){border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.danger{color:var(--t);border-color:var(--t)}
+.btn.small{padding:3px 10px;font-size:.82rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.form-wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;max-width:760px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.panel h2{margin:0 0 10px;font-family:var(--font-display);font-size:1.08rem;font-weight:600}
+.intro summary{cursor:pointer;font-weight:600}
+.intro ul{margin:10px 0 0;padding-left:1.2em;display:grid;gap:4px}
+form{display:grid;gap:16px}
+fieldset{border:0;margin:0;padding:0;min-width:0;display:grid;gap:6px}
+.typepick{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.typepick label{cursor:pointer;display:block;position:relative}
+.typepick input{position:absolute;opacity:0;pointer-events:none}
+.typepick .opt{display:flex;flex-direction:column;border:2px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--surface);line-height:1.4}
+.typepick .opt b{font-family:var(--font-display);font-size:1.15rem}
+.typepick .opt span{font-size:.82rem;color:var(--muted)}
+.typepick input:checked+.opt{border-color:var(--accent);background:var(--surface2)}
+.typepick input:focus-visible+.opt{outline:2px solid var(--focus);outline-offset:2px}
+.typepick .o-S b{color:var(--s)}.typepick .o-W b{color:var(--w)}.typepick .o-O b{color:var(--o)}.typepick .o-T b{color:var(--t)}
+.guide{border-radius:10px;padding:12px 14px;font-size:.9rem}
+.guide p{margin:0}
+.g-S{background:var(--s-bg)}.g-W{background:var(--w-bg)}.g-O{background:var(--o-bg)}.g-T{background:var(--t-bg)}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.req{color:var(--t)}
+.urg{display:flex;gap:6px;flex-wrap:wrap}
+.urg label{cursor:pointer;position:relative}
+.urg input{position:absolute;opacity:0;pointer-events:none}
+.urg span{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);border-radius:8px;font-weight:600;background:var(--surface)}
+.urg input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.urg input:focus-visible+span{outline:2px solid var(--focus);outline-offset:2px}
+.notice{padding:10px 14px;border-radius:10px;background:var(--w-bg);color:var(--ink);font-size:.9rem;margin:0}
+.example{font-size:.88rem;color:var(--muted);margin:0}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+.sum-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}
+.stats{display:flex;flex-wrap:wrap;gap:6px 28px;margin:0 0 16px}
+.stats div{display:flex;align-items:baseline;gap:8px}
+.stats b{font-family:var(--font-display);font-size:1.7rem;font-variant-numeric:tabular-nums}
+.stats span{color:var(--muted);font-size:.88rem}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:96px 1fr 34px;gap:10px;align-items:center;font-size:.9rem}
+.bar .track{height:14px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.bar .fill{height:100%;border-radius:4px}
+.f-S{background:var(--s)}.f-W{background:var(--w)}.f-O{background:var(--o)}.f-T{background:var(--t)}
+.bar .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.88rem}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:600;color:var(--muted);font-size:.8rem}
+.top-list{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.top-list li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start}
+.top-list .sc-v{font-weight:700;font-variant-numeric:tabular-nums}
+.top-list p{margin:0;overflow-wrap:anywhere}
+.top-list small{color:var(--muted)}
+.muted{color:var(--muted);font-size:.88rem}
+
+.brief-group{margin-top:16px;padding:14px 16px 6px;border:1px solid var(--line);border-top:4px solid var(--gc,var(--accent));border-radius:12px;background:var(--surface)}
+.brief-group:first-child{margin-top:0}
+.bg-S{--gc:var(--s)}.bg-W{--gc:var(--w)}.bg-O{--gc:var(--o)}.bg-T{--gc:var(--t)}
+.brief-group .brief-title{margin-bottom:10px}
+.brief-title{margin:0 0 8px;font-family:var(--font-display);font-size:1rem;font-weight:600;display:flex;align-items:center;gap:8px}
+.brief-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.4fr);gap:0 16px;padding:10px 0;border-top:1px solid var(--line)}
+.brief-head{border-top:0;padding:0 0 8px;font-size:.76rem;font-weight:500;color:var(--label);background:var(--surface2);border-radius:6px 6px 0 0;padding:8px 10px;border-bottom:1px solid var(--line);line-height:1.45}
+.bc{min-width:0;overflow-wrap:anywhere;white-space:pre-wrap;color:var(--ink);font-size:1.05rem;font-weight:500}
+.bc-title{font-weight:700;color:var(--gc,var(--ink))}
+.lab{display:none}
+.brief-row.has-act{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.4fr) auto}
+.bc-act{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start}
+@media (max-width:700px){
+  .brief-head{display:none}
+  .brief-row,.brief-row.has-act{grid-template-columns:minmax(0,1fr);gap:8px;padding:12px 0}
+  .lab{display:block;font-size:.7rem;font-weight:500;color:var(--label);letter-spacing:.02em;margin-bottom:1px;white-space:normal}
+  .bc:not(.bc-title){padding-left:10px;border-left:3px solid var(--gc,var(--ans-bar));background:var(--ans-bg);border-radius:0 6px 6px 0;padding-top:4px;padding-bottom:4px}
+}
+.mod-title{margin:18px 0 10px;font-family:var(--font-display);font-size:1.05rem;font-weight:600}
+#modList .mod-title:first-child{margin-top:0}
+.mod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:12px}
+.mod-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mod-actions input[type=text]{flex:1 1 200px;width:auto}
+.intro-lead{margin:10px 0 12px;font-size:1.05rem;font-weight:500;color:var(--ink)}
+.intro-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}
+.ig{border-radius:10px;padding:10px 14px 4px;border-left:4px solid var(--accent)}
+.ig h3{margin:0 0 8px;font-family:var(--font-display);font-size:.95rem;font-weight:600}
+.ig p{margin:0 0 10px}
+.ig .chip{margin-right:6px}
+.ig-in{background:var(--surface2);border-left-color:var(--s)}
+.ig-out{background:var(--surface2);border-left-color:var(--o)}
+.intro-tip{margin:12px 0 0;padding:10px 14px;border-radius:10px;background:var(--ans-bg);border-left:4px solid var(--ans-bar)}
+.intro-h{margin:16px 0 6px;font-family:var(--font-display);font-size:.95rem;font-weight:600}
+.intro .intro-use{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.intro-use li{position:relative;padding-left:26px}
+.intro-use li::before{content:"\2713";position:absolute;left:0;top:1px;width:18px;height:18px;border-radius:50%;background:var(--s-bg);color:var(--s);font-size:.75rem;font-weight:700;line-height:18px;text-align:center}
+.intro-note{margin:12px 0 0;color:var(--label);font-size:.9rem}
+.mine-row{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.mine-row:first-of-type{border-top:0}
+.st{display:inline-block;border-radius:6px;padding:0 8px;font-size:.78rem;font-weight:600;background:var(--w-bg);color:var(--w)}
+.st.rej{background:var(--t-bg);color:var(--t)}
+.edit{display:grid;gap:10px}
+.edit .field label{font-weight:600;font-size:.82rem}
+
+#toast{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));pointer-events:none}
+#toast span{background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:.9rem;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
+#toast.show span{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){#toast span{transition:none}}
+@media (max-width:480px){.bar{grid-template-columns:78px 1fr 30px}.side{align-items:flex-start}.filters{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <p class="eyebrow">ระดมความเห็นจากพนักงานทุกหน่วย</p>
+      <h1>กระดาน SWOT องค์กรประปา</h1>
+      <p class="lede">เสนอจุดแข็ง จุดอ่อน โอกาส และอุปสรรคจากงานที่คุณทำจริง พร้อมเหตุผลและแนวทางแก้ไข ข้อเสนอที่ผู้ดูแลตรวจแล้วจะขึ้นกระดานให้ทุกคนเห็น และให้คะแนนความสำคัญได้</p>
+    </div>
+    <div class="side">
+      <div class="live" id="live" role="status"><span class="dot"></span><span id="liveText">กำลังเชื่อมต่อ</span></div>
+      <button type="button" class="linkbtn" id="adminToggle">ผู้ดูแลระบบ</button>
+    </div>
+  </header>
+
+  <div class="banner" id="setupBanner" hidden>
+    <b>ยังไม่ได้เชื่อมต่อ Google Sheets</b>
+    เปิดไฟล์นี้ด้วยโปรแกรมแก้ไขข้อความ แล้วใส่ URL ของเว็บแอป Apps Script (ลงท้าย /exec) ที่ตัวแปร API_URL ใกล้ท้ายไฟล์
+  </div>
+
+  <div class="panel" id="adminBox" hidden>
+    <form id="adminForm">
+      <div class="field"><label for="a-key">รหัสผู้ดูแล</label><input type="password" id="a-key" autocomplete="current-password"></div>
+      <button type="submit" class="btn primary" id="a-go">เข้าสู่ระบบ</button>
+    </form>
+    <p class="msg" id="a-msg" role="alert" hidden></p>
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="เมนูหลัก">
+    <button class="tab" role="tab" id="tab-board" data-tab="board" aria-selected="true">กระดาน</button>
+    <button class="tab" role="tab" id="tab-add" data-tab="add" aria-selected="false">เสนอข้อมูลใหม่</button>
+    <button class="tab" role="tab" id="tab-summary" data-tab="summary" aria-selected="false">สรุปภาพรวม</button>
+    <button class="tab" role="tab" id="tab-mod" data-tab="mod" aria-selected="false" hidden>ตรวจก่อนเผยแพร่<span class="pill" id="modCount" hidden>0</span></button>
+  </nav>
+
+  <main>
+    <section id="view-board" aria-labelledby="tab-board">
+      <div class="panel" id="minePanel" style="margin-bottom:16px" hidden><h2>ข้อเสนอของคุณที่ยังไม่ขึ้นกระดาน</h2><p class="muted" style="margin:0 0 6px">ผู้ดูแลจะตรวจก่อนขึ้นกระดาน คุณแก้ไขหรือลบข้อเสนอของคุณเองได้</p><div id="mineList"></div></div>
+      <div class="filters">
+        <div class="field" id="f-unit-wrap" hidden><label for="f-unit">หน่วยงาน</label><select id="f-unit"></select></div>
+        <div class="field"><label for="f-sort">เรียงตาม</label>
+          <select id="f-sort">
+            <option value="score">คะแนนความสำคัญสูงสุด</option>
+            <option value="urgent">ผู้เสนอระบุเร่งด่วนที่สุด</option>
+            <option value="new">เสนอล่าสุด</option>
+          </select></div>
+        <div class="field"><label for="f-q">ค้นหา</label><input type="text" id="f-q" placeholder="พิมพ์คำที่ต้องการหา" autocomplete="off"></div>
+      </div>
+
+      <div class="group">
+        <h2 class="group-label">ภายในองค์กร · เราควบคุมและแก้ไขได้เอง</h2>
+        <div class="pair">
+          <div class="quad q-S"><div class="quad-head"><span class="badge">S</span><div class="quad-name">จุดแข็ง<small>Strengths</small></div><span class="count" id="count-S">0</span><p class="quad-ask">สิ่งที่เราทำได้ดี เป็นข้อได้เปรียบ</p></div><div class="list" id="list-S"></div></div>
+          <div class="quad q-W"><div class="quad-head"><span class="badge">W</span><div class="quad-name">จุดอ่อน<small>Weaknesses</small></div><span class="count" id="count-W">0</span><p class="quad-ask">สิ่งที่ยังบกพร่องและต้องปรับปรุง</p></div><div class="list" id="list-W"></div></div>
+        </div>
+      </div>
+      <div class="group">
+        <h2 class="group-label">ภายนอกองค์กร · เราไม่ได้ควบคุม แต่ต้องรับมือ</h2>
+        <div class="pair">
+          <div class="quad q-O"><div class="quad-head"><span class="badge">O</span><div class="quad-name">โอกาส<small>Opportunities</small></div><span class="count" id="count-O">0</span><p class="quad-ask">สิ่งภายนอกที่เรานำมาใช้ประโยชน์ได้</p></div><div class="list" id="list-O"></div></div>
+          <div class="quad q-T"><div class="quad-head"><span class="badge">T</span><div class="quad-name">อุปสรรค<small>Threats</small></div><span class="count" id="count-T">0</span><p class="quad-ask">สิ่งภายนอกที่อาจกระทบงานของเรา</p></div><div class="list" id="list-T"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-add" hidden aria-labelledby="tab-add">
+      <div class="form-wrap">
+        <div class="panel intro">
+          <details>
+            <summary>ก่อนเริ่ม: อ่านสั้น ๆ 30 วินาที</summary>
+            <p class="intro-lead">บอกเราว่างานของคุณมีอะไรดี อะไรติดขัด และอะไรที่ควรระวัง เพื่อให้องค์กรวางแผนปีหน้าได้ตรงกับปัญหาจริง</p>
+            <div class="intro-groups">
+              <div class="ig ig-in">
+                <h3>องค์กรแก้เองได้</h3>
+                <p><span class="chip t-S">S จุดแข็ง</span> อะไรที่เราทำได้ดี</p>
+                <p><span class="chip t-W">W จุดอ่อน</span> อะไรที่เรายังทำได้ไม่ดี</p>
+              </div>
+              <div class="ig ig-out">
+                <h3>องค์กรแก้เองไม่ได้ แต่ต้องรับมือ</h3>
+                <p><span class="chip t-O">O โอกาส</span> อะไรจากข้างนอกที่เปิดทางให้องค์กรมีรายได้เพิ่ม เช่น นโยบายภาครัฐที่ส่งเสริมธุรกิจน้ำ ลูกค้ากลุ่มใหม่ เทคโนโลยีใหม่</p>
+                <p><span class="chip t-T">T อุปสรรค</span> อะไรจากข้างนอกที่ทำให้เราลำบาก เช่น ภัยแล้ง ราคาพลังงานสูงขึ้น</p>
+              </div>
+            </div>
+            <p class="intro-tip">ไม่แน่ใจว่าเรื่องของคุณเป็นประเภทไหน ให้ถามตัวเองว่า <b>"ถ้าองค์กรตั้งใจ แก้เองได้ไหม"</b> ถ้าได้ คือจุดแข็งหรือจุดอ่อน ถ้าไม่ได้ คือโอกาสหรืออุปสรรค</p>
+            <h3 class="intro-h">ข้อมูลที่ได้จะนำไปใช้ทำอะไร</h3>
+            <ul class="intro-use">
+              <li>ทำให้นโยบายและแนวทางการทำงานชัดเจนขึ้นว่าควรเน้นเรื่องไหน</li>
+              <li>ดูแลและจัดคนให้ทำงานได้เต็มประสิทธิภาพขึ้น ใช้เวลาและแรงงานคุ้มค่า</li>
+              <li>ลดต้นทุนที่ไม่จำเป็น เช่น งานซ้ำซ้อน รอคิวนาน ซ่อมแล้วซ่อมอีก</li>
+            </ul>
+            <p class="intro-note">ไม่มีคำตอบถูกหรือผิด</p>
+          </details>
+        </div>
+
+        <div class="panel">
+          <h2>ข้อเสนอของคุณ</h2>
+          <form id="form" novalidate>
+            <fieldset>
+              <legend>ประเภท <span class="req">*</span></legend>
+              <div class="typepick" id="typepick">
+                <label><input type="radio" name="type" value="S"><span class="opt o-S"><b>S จุดแข็ง</b><span>ภายใน</span></span></label>
+                <label><input type="radio" name="type" value="W"><span class="opt o-W"><b>W จุดอ่อน</b><span>ภายใน</span></span></label>
+                <label><input type="radio" name="type" value="O"><span class="opt o-O"><b>O โอกาส</b><span>ภายนอก</span></span></label>
+                <label><input type="radio" name="type" value="T"><span class="opt o-T"><b>T อุปสรรค</b><span>ภายนอก</span></span></label>
+              </div>
+            </fieldset>
+            <div class="guide g-W" id="guide" hidden></div>
+
+            <div class="field"><label for="i-title">หัวข้อ (สรุปเป็นประโยคเดียว) <span class="req">*</span></label>
+              <input type="text" id="i-title" maxlength="140" autocomplete="off">
+              <p class="example" id="example"></p></div>
+
+            <div class="row2">
+              <div class="field"><label for="i-unit">หน่วยงานของคุณ <span class="req">*</span> <span class="hint">เฉพาะผู้ดูแลเห็น</span></label><select id="i-unit"></select></div>
+              <div class="field"><label for="i-role">กลุ่มตำแหน่ง <span class="hint">เฉพาะผู้ดูแลเห็น</span></label><select id="i-role"></select></div>
+            </div>
+
+            <div class="field"><label for="i-detail">รายละเอียด <span class="hint">เกิดอะไรขึ้น ที่ไหน บ่อยแค่ไหน</span></label>
+              <textarea id="i-detail" maxlength="1500"></textarea></div>
+            <div class="field"><label for="i-evidence">หลักฐานหรือตัวอย่างจริง <span class="hint">เหตุการณ์ ตัวเลข วันที่ เลขที่เอกสาร</span></label>
+              <textarea id="i-evidence" maxlength="1500"></textarea></div>
+            <div class="field"><label for="i-why" id="l-why">ทำไมจึงคิดว่าเป็นประเภทนี้ <span class="req">*</span></label>
+              <textarea id="i-why" maxlength="1500"></textarea></div>
+            <div class="field"><label for="i-impact">ผลกระทบ <span class="hint">กระทบใคร หรือกระทบอะไร เช่น ลูกค้า ต้นทุน คุณภาพน้ำ ความปลอดภัย</span></label>
+              <textarea id="i-impact" maxlength="1500"></textarea></div>
+            <div class="field"><label for="i-sug" id="l-sug">ถ้าเป็นคุณ จะแก้ไขหรือต่อยอดอย่างไร <span class="req">*</span></label>
+              <textarea id="i-sug" maxlength="1500"></textarea></div>
+            <div class="field"><label for="i-support">ต้องการอะไรสนับสนุน <span class="hint">คน งบประมาณ เครื่องมือ นโยบาย</span></label>
+              <textarea id="i-support" maxlength="800" style="min-height:64px"></textarea></div>
+
+            <fieldset>
+              <legend>ความเร่งด่วนในมุมมองของคุณ <span class="req">*</span> <span class="hint">1 = ค่อยทำได้ · 5 = เร่งด่วนที่สุด</span></legend>
+              <div class="urg" id="urg">
+                <label><input type="radio" name="urgency" value="1"><span>1</span></label>
+                <label><input type="radio" name="urgency" value="2"><span>2</span></label>
+                <label><input type="radio" name="urgency" value="3" checked><span>3</span></label>
+                <label><input type="radio" name="urgency" value="4"><span>4</span></label>
+                <label><input type="radio" name="urgency" value="5"><span>5</span></label>
+              </div>
+            </fieldset>
+
+            <div class="field"><label for="i-name">ชื่อผู้เสนอ <span class="hint">ไม่บังคับ เฉพาะผู้ดูแลเห็น ไม่แสดงบนกระดาน</span></label>
+              <input type="text" id="i-name" maxlength="80" autocomplete="off"></div>
+
+            <p id="formError" class="notice" role="alert" hidden></p>
+            <div class="actions">
+              <button type="submit" class="btn primary" id="submitBtn">ส่งข้อเสนอ</button>
+              <span class="muted">ช่องที่มี <span class="req">*</span> ต้องกรอก ผู้ดูแลจะตรวจก่อนขึ้นกระดาน</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-mod" hidden aria-labelledby="tab-mod">
+      <p class="muted" style="margin:0 0 14px">ข้อเสนอใหม่จะรออยู่ที่นี่ เมื่ออนุมัติแล้วจึงขึ้นกระดานให้พนักงานเห็น ข้อความที่คุณแก้ไขจะมีป้าย "ผู้ดูแลแก้ไขถ้อยคำ" กำกับบนการ์ด</p>
+      <div id="modList"></div>
+    </section>
+
+    <section id="view-summary" hidden aria-labelledby="tab-summary">
+      <div class="stats" id="stats"></div>
+      <div class="sum-grid">
+        <div class="panel"><h2>จำนวนข้อเสนอตามประเภท</h2><div class="bars" id="bars"></div></div>
+        <div class="panel"><h2>ข้อเสนอที่ได้คะแนนความสำคัญสูงสุด</h2><ol class="top-list" id="toplist"></ol></div>
+        <div class="panel" style="grid-column:1/-1"><h2>ข้อเสนอทั้งหมดโดยสรุป</h2>
+          <p class="muted" style="margin:0 0 14px">หัวข้อ เหตุผล และข้อเสนอแนะของทุกข้อเสนอที่ขึ้นกระดานแล้ว จัดกลุ่มตามประเภท เรียงตามคะแนนความสำคัญ</p>
+          <div id="brief"></div></div>
+        <div class="panel" id="unitPanel" style="grid-column:1/-1" hidden><h2>ข้อเสนอแยกตามหน่วยงาน</h2>
+          <div class="tablewrap"><table id="unitTable"></table></div>
+          <p class="muted" id="coverage" style="margin:10px 0 0"></p></div>
+      </div>
+      <div class="actions" style="margin-top:16px" id="exportRow" hidden>
+        <button type="button" class="btn" id="exportBtn">ส่งออกเป็นไฟล์ CSV</button>
+        <span class="muted">เปิดต่อใน Excel ได้ ภาษาไทยไม่เพี้ยน</span>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast" aria-live="polite"><span id="toastText"></span></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ===== ตั้งค่า: วาง URL ของเว็บแอป Apps Script (ลงท้าย /exec) ระหว่างเครื่องหมายคำพูด ===== */
+  var API_URL = "https://script.google.com/macros/s/AKfycbwpdNxViY6FB6jywvL3hOUFSHNNJ3SAaO3tIUtcJMLc8HEanIlPtSfJ1TNB20xNX_mC/exec";
+  var POLL_MS = 30000; // ดึงข้อมูลใหม่ทุก 30 วินาที (เฉพาะตอนเปิดหน้านี้อยู่)
+  /* ============================================================================================ */
+
+  var configured = /^https?:\/\//.test(API_URL) || API_URL.charAt(0) === "/";
+
+  var TYPES = {
+    S: { name: "จุดแข็ง", ask: "สิ่งที่องค์กรเราทำได้ดี เป็นข้อได้เปรียบ และเรากำหนดเองได้",
+         why: "ทำไมจึงเป็นจุดแข็ง? หน่วยงานอื่นทำได้เท่านี้ไหม? ลอกเลียนยากแค่ไหน?",
+         sug: "ควรรักษาหรือต่อยอดจุดแข็งนี้อย่างไร",
+         ex: "ตัวอย่าง: ช่างซ่อมท่อรับแจ้งเหตุและถึงหน้างานภายใน 2 ชั่วโมง" },
+    W: { name: "จุดอ่อน", ask: "สิ่งที่ยังบกพร่อง องค์กรแก้ได้เองถ้าตั้งใจแก้",
+         why: "อะไรคือสาเหตุที่แท้จริง? ปัญหานี้เกิดมานานเท่าไร? ลองถามทำไมซ้ำ 3 ครั้งจนถึงต้นเหตุ",
+         sug: "ถ้าเป็นคุณ จะแก้ไขอย่างไร",
+         ex: "ตัวอย่าง: ท่อเมนเก่าในเขต X แตกซ้ำ 6 ครั้งใน 3 เดือน" },
+    O: { name: "โอกาส", ask: "สิ่งภายนอกที่องค์กรนำมาใช้ประโยชน์ได้ แต่เราไม่ได้เป็นผู้กำหนด",
+         why: "ทำไมโอกาสนี้เหมาะกับเราตอนนี้? ถ้าไม่ทำจะเสียอะไร?",
+         sug: "เราควรเริ่มใช้โอกาสนี้อย่างไร",
+         ex: "ตัวอย่าง: มาตรวัดน้ำอัจฉริยะราคาถูกลง ใช้ลดน้ำสูญเสียได้" },
+    T: { name: "อุปสรรค", ask: "สิ่งภายนอกที่อาจกระทบงานของเรา และเราไม่ได้เป็นผู้ควบคุม",
+         why: "เกิดขึ้นบ่อยแค่ไหน? ตอนนี้เราเตรียมรับมืออะไรไว้แล้วบ้าง?",
+         sug: "ควรเตรียมรับมือหรือลดผลกระทบอย่างไร",
+         ex: "ตัวอย่าง: น้ำเค็มรุกในฤดูแล้ง ทำให้คุณภาพน้ำดิบเสื่อม" }
+  };
+  var ORDER = ["S", "W", "O", "T"];
+  var UNITS = ["ผู้บริหาร / นโยบายและแผน", "ผลิตน้ำ / โรงสูบ โรงกรอง", "จ่ายน้ำ / ซ่อมท่อ", "มาตรวัดน้ำและจัดเก็บรายได้",
+    "บริการลูกค้า", "วิศวกรรมและก่อสร้าง", "คุณภาพน้ำ / ห้องปฏิบัติการ", "การเงิน บัญชี พัสดุ", "บุคคลและธุรการ", "เทคโนโลยีสารสนเทศ", "อื่น ๆ"];
+  var ROLES = ["ผู้บริหารระดับสูง", "ผู้จัดการ / หัวหน้าฝ่าย", "หัวหน้างาน / หัวหน้าชุด", "วิศวกร / นักวิชาการ",
+    "ช่าง / พนักงานปฏิบัติการ", "พนักงานบริการและธุรการ", "อื่น ๆ"];
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ---------- พื้นที่เก็บในเบราว์เซอร์ (ใช้ไม่ได้ก็ไม่เป็นไร) ---------- */
+  var mem = {};
+  function sget(store, k) { try { return window[store].getItem(k); } catch (e) { return mem[store + k] || null; } }
+  function sset(store, k, v) { try { window[store].setItem(k, v); } catch (e) { mem[store + k] = v; } }
+  function sdel(store, k) { try { window[store].removeItem(k); } catch (e) { delete mem[store + k]; } }
+  function rnd() {
+    var a = new Uint8Array(16), s = "";
+    (window.crypto || window.msCrypto).getRandomValues(a);
+    for (var i = 0; i < a.length; i++) s += ("0" + a[i].toString(36)).slice(-2);
+    return s;
+  }
+
+  var voterId = sget("localStorage", "swot_voter");
+  if (!voterId) { voterId = "v" + rnd(); sset("localStorage", "swot_voter", voterId); }
+  var ownerToken = sget("localStorage", "swot_owner") || "";
+  var adminKey = sget("sessionStorage", "swot_admin") || "";
+
+  /* ---------- สถานะ ---------- */
+  var entries = [], queue = [], mine = [], myScores = {}, voters = 0;
+  var isAdmin = false, loaded = false, connErr = false;
+  var ver = null, busy = false, again = false;
+  var openSet = new Set();
+  var state = { tab: "board", unit: "", sort: "score", q: "", pendingDelete: null, editing: null };
+  var voteChain = Promise.resolve(), toastTimer = null;
+
+  function el(tag, cls) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    for (var i = 2; i < arguments.length; i++) {
+      var k = arguments[i];
+      if (k === null || k === undefined || k === false) continue;
+      n.append(k.nodeType ? k : document.createTextNode(String(k)));
+    }
+    return n;
+  }
+  function toast(msg) {
+    $("toastText").textContent = msg;
+    $("toast").classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { $("toast").classList.remove("show"); }, 3200);
+  }
+  function fmtDate(ts) {
+    if (!ts) return "";
+    try { return new Date(ts).toLocaleDateString("th-TH", { day: "numeric", month: "short" }); } catch (e) { return ""; }
+  }
+  function fillSelect(sel, items, first) {
+    sel.replaceChildren();
+    if (first !== undefined) { var o0 = el("option", null, first); o0.value = ""; sel.append(o0); }
+    items.forEach(function (t) { var o = el("option", null, t); o.value = t; sel.append(o); });
+  }
+  function avgOf(e) { return e.vc ? e.vs / e.vc : 0; }
+
+  /* ---------- เรียก API ---------- */
+  async function api(action, extra) {
+    var body = Object.assign({ action: action, voterId: voterId }, extra || {});
+    if (ownerToken) body.ownerToken = ownerToken;
+    if (adminKey) body.adminKey = adminKey;
+    var r;
+    try {
+      r = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body), redirect: "follow" });
+    } catch (e) { var ne = new Error("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้"); ne.code = "network"; throw ne; }
+    var j;
+    try { j = await r.json(); } catch (e) { var pe = new Error("เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง"); pe.code = "parse"; throw pe; }
+    if (!j || !j.ok) { var se = new Error((j && j.error) || "เกิดข้อผิดพลาด"); se.code = (j && j.code) || "server"; throw se; }
+    return j;
+  }
+  function errText(e) { return e && e.message ? e.message : "บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง"; }
+
+  async function refresh(force) {
+    if (!configured) return;
+    if (busy) { if (force) again = true; return; }
+    busy = true;
+    var changed = false;
+    try {
+      var j = await api("list", { ver: force ? null : ver });
+      if (connErr) changed = true;
+      connErr = false;
+      if (!loaded) { loaded = true; changed = true; }
+      var wasAdmin = isAdmin;
+      isAdmin = !!j.admin;
+      if (adminKey && !isAdmin) { adminKey = ""; sdel("sessionStorage", "swot_admin"); toast("รหัสผู้ดูแลไม่ถูกต้องหรือหมดสิทธิ์"); }
+      if (wasAdmin !== isAdmin) changed = true;
+      if (!j.unchanged) {
+        ver = j.ver; entries = j.entries || []; queue = j.queue || []; mine = j.mine || [];
+        myScores = j.myScores || {}; voters = j.voters || 0; changed = true;
+      }
+    } catch (e) {
+      if (!connErr) changed = true;
+      connErr = true;
+    }
+    busy = false;
+    if (changed) render(); else renderLive();
+    if (again) { again = false; refresh(true); }
+  }
+
+  /* ---------- แท็บ ---------- */
+  function setTab(t) {
+    if (["board", "add", "summary", "mod"].indexOf(t) < 0 || (t === "mod" && !isAdmin)) t = "board";
+    state.tab = t;
+    ["board", "add", "summary", "mod"].forEach(function (k) {
+      $("view-" + k).hidden = k !== t;
+      $("tab-" + k).setAttribute("aria-selected", k === t ? "true" : "false");
+    });
+  }
+
+  /* ---------- ส่วนหัว ---------- */
+  function renderLive() {
+    var live = $("live"), txt = $("liveText");
+    live.className = "live";
+    if (!configured) { live.classList.add("err"); txt.textContent = "ยังไม่ได้เชื่อมต่อ"; }
+    else if (connErr) { live.classList.add("err"); txt.textContent = "เชื่อมต่อขัดข้อง จะลองใหม่อัตโนมัติ"; }
+    else if (!loaded) { txt.textContent = "กำลังเชื่อมต่อ"; }
+    else {
+      live.classList.add("on");
+      txt.textContent = "อัปเดตอัตโนมัติ · " + entries.length + " ข้อเสนอ" + (isAdmin && queue.length ? " · รอตรวจ " + queue.filter(function (q) { return q.status === "pending"; }).length : "");
+    }
+  }
+
+  /* ---------- กระดาน ---------- */
+  function match(e) {
+    if (state.unit && e.unit !== state.unit) return false;
+    if (state.q) {
+      var hay = [e.title, e.detail, e.evidence, e.why, e.impact, e.suggestion, e.support, e.unit, e.role].join(" ").toLowerCase();
+      if (hay.indexOf(state.q.toLowerCase()) < 0) return false;
+    }
+    return true;
+  }
+  function cmp(a, b) {
+    if (state.sort === "new") return (b.createdAt || 0) - (a.createdAt || 0);
+    if (state.sort === "urgent") return (b.urgency || 0) - (a.urgency || 0) || (b.createdAt || 0) - (a.createdAt || 0);
+    var d = avgOf(b) - avgOf(a);
+    return d || (b.vc || 0) - (a.vc || 0) || (b.createdAt || 0) - (a.createdAt || 0);
+  }
+  function card(e) {
+    var t = TYPES[e.type] ? e.type : "W";
+    var c = el("article", "card");
+    if (e.own && !isAdmin && state.editing === e.id) { c.append(editForm(e, true)); return c; }
+    c.append(el("div", "card-head", el("span", "chip t-" + t, t + " " + TYPES[t].name), el("span", null, fmtDate(e.createdAt))));
+    var ttl = el("h3", "card-title", e.title);
+    c.append(ttl);
+    var parts = [];
+    if (isAdmin) { // หน่วยงาน กลุ่มตำแหน่ง ชื่อผู้เสนอ แสดงเฉพาะผู้ดูแล
+      if (e.unit) parts.push(e.unit);
+      if (e.role) parts.push(e.role);
+      if (e.name) parts.push("ผู้เสนอ: " + e.name);
+    }
+    if (e.urgency) parts.push("เร่งด่วน " + e.urgency + "/5 ตามผู้เสนอ");
+    if (e.edited) parts.push("ผู้ดูแลแก้ไขถ้อยคำ");
+    if (e.own && !isAdmin) parts.push("ข้อเสนอของคุณ");
+    c.append(el("p", "meta", parts.join(" · ")));
+    c.append(el("p", "sug", el("span", "lbl", "ข้อเสนอแนะ "), e.suggestion));
+
+    var rows = [["เกิดอะไรขึ้น", e.detail], ["หลักฐานหรือตัวอย่างจริง", e.evidence], ["ทำไมจึงเป็น " + TYPES[t].name, e.why],
+      ["ผลกระทบ", e.impact], ["สิ่งที่ต้องการสนับสนุน", e.support]].filter(function (r) { return r[1]; });
+    if (rows.length) {
+      var dl = el("dl");
+      rows.forEach(function (r) { dl.append(el("dt", null, r[0]), el("dd", null, r[1])); });
+      var det = el("details", "more", el("summary", null, "ดูรายละเอียดทั้งหมด"), dl);
+      if (openSet.has(e.id)) det.open = true;
+      det.addEventListener("toggle", function () { if (det.open) openSet.add(e.id); else openSet.delete(e.id); });
+      ttl.classList.add("clickable"); // คลิกที่หัวข้อเพื่อเปิดหรือปิดรายละเอียดได้ด้วย
+      ttl.addEventListener("click", function () { det.open = !det.open; });
+      c.append(det);
+    }
+
+    var vote = el("div", "vote", el("span", "vote-lbl", "ความสำคัญ"));
+    var sc = el("div", "scale");
+    for (var n = 1; n <= 5; n++) (function (n) {
+      var b = el("button", "sc" + (myScores[e.id] === n ? " on" : ""), n);
+      b.type = "button";
+      b.setAttribute("aria-label", "ให้คะแนนความสำคัญ " + n + " จาก 5");
+      b.setAttribute("aria-pressed", myScores[e.id] === n ? "true" : "false");
+      b.disabled = !configured;
+      b.addEventListener("click", function () { castVote(e.id, n); });
+      sc.append(b);
+    })(n);
+    vote.append(sc, el("span", "avg", e.vc ? "เฉลี่ย " + avgOf(e).toFixed(1) + " จาก " + e.vc + " โหวต" : "ยังไม่มีโหวต"));
+    c.append(vote);
+
+    if (isAdmin) {
+      var tools = el("div", "tools");
+      if (isAdmin) {
+        var sel = el("select");
+        sel.setAttribute("aria-label", "ย้ายประเภท");
+        ORDER.forEach(function (k) { var o = el("option", null, "ย้ายไป " + k + " " + TYPES[k].name); o.value = k; if (k === t) o.selected = true; sel.append(o); });
+        sel.addEventListener("change", function () { modOp(e.id, "retype", { type: sel.value }, "ย้ายประเภทแล้ว"); });
+        tools.append(sel);
+      }
+      if (state.pendingDelete === e.id) {
+        tools.append(btn("ยืนยันลบ", "danger", function () { delEntry(e.id); }), btn("ยกเลิก", "", function () { state.pendingDelete = null; render(); }));
+      } else {
+        tools.append(btn("ลบ", "", function () { state.pendingDelete = e.id; render(); }));
+      }
+      c.append(tools);
+    } else if (e.own) {
+      c.append(ownTools(e));
+    }
+    return c;
+  }
+  function ownTools(e) {
+    var tools = el("div", "tools");
+    tools.append(btn("แก้ไขของฉัน", "", function () { state.editing = e.id; state.pendingDelete = null; render(); }));
+    if (state.pendingDelete === e.id) {
+      tools.append(btn("ยืนยันลบ", "danger", function () { delOwn(e.id); }), btn("ยกเลิก", "", function () { state.pendingDelete = null; render(); }));
+    } else {
+      tools.append(btn("ลบของฉัน", "", function () { state.pendingDelete = e.id; render(); }));
+    }
+    return tools;
+  }
+  function renderBoard() {
+    var list = entries.filter(match);
+    ORDER.forEach(function (T) {
+      var col = list.filter(function (e) { return e.type === T; }).sort(cmp);
+      $("count-" + T).textContent = col.length;
+      var box = $("list-" + T);
+      box.replaceChildren();
+      if (!col.length) {
+        var msg;
+        if (!configured) msg = el("div", "empty", "ยังไม่ได้เชื่อมต่อกับ Google Sheets");
+        else if (connErr && !loaded) msg = el("div", "empty", "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กำลังลองใหม่");
+        else if (!loaded) msg = el("div", "empty", "กำลังโหลดข้อเสนอ");
+        else if (!state.unit && !state.q) {
+          msg = el("div", "empty", "ยังไม่มี" + TYPES[T].name + "บนกระดาน " + TYPES[T].ask + " เริ่มเสนอเรื่องแรกได้เลย");
+          var go = el("button", "btn small", "เสนอ" + TYPES[T].name); go.type = "button"; msg.append(el("br"), go);
+          go.addEventListener("click", function () { setTab("add"); pickType(T); });
+        } else msg = el("div", "empty", "ไม่พบรายการตามตัวกรองที่เลือก");
+        box.append(msg);
+      } else col.forEach(function (e) { box.append(card(e)); });
+    });
+  }
+
+  /* ---------- ข้อเสนอของฉัน ---------- */
+  function btn(label, cls, fn) {
+    var b = el("button", "btn small" + (cls ? " " + cls : ""), label);
+    b.type = "button";
+    b.addEventListener("click", fn);
+    return b;
+  }
+  function renderMine() {
+    $("minePanel").hidden = !mine.length;
+    var box = $("mineList");
+    box.replaceChildren();
+    mine.slice().sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); }).forEach(function (e) {
+      var rej = e.status === "rejected";
+      if (state.editing === e.id) { var ef = el("div", "mine-row"); ef.append(editForm(e, true)); box.append(ef); return; }
+      var row = el("div", "mine-row", el("span", "st" + (rej ? " rej" : ""), rej ? "ไม่ผ่านการตรวจ" : "รอผู้ดูแลตรวจ"), el("span", null, e.title));
+      if (rej && e.modNote) row.append(el("span", "muted", "เหตุผล: " + e.modNote));
+      row.append(ownTools(e));
+      box.append(row);
+    });
+  }
+
+  /* ---------- ตรวจก่อนเผยแพร่ (ผู้ดูแล) ---------- */
+  function editForm(e, own) {
+    var f = el("div", own ? "edit own-edit" : "edit"), inputs = {};
+    if (own) f.append(el("p", "muted", "หลังบันทึก ข้อเสนอจะกลับไปรอผู้ดูแลตรวจอีกครั้งก่อนขึ้นกระดาน" + (e.own ? " และคะแนนโหวตเดิมจะถูกล้าง" : "")));
+    [["title", "หัวข้อ", false, 140], ["detail", "รายละเอียด", true, 1500], ["evidence", "หลักฐานหรือตัวอย่างจริง", true, 1500],
+     ["why", "เหตุผล", true, 1500], ["impact", "ผลกระทบ", true, 1500], ["suggestion", "ข้อเสนอแนะ", true, 1500],
+     ["support", "สิ่งที่ต้องการสนับสนุน", true, 800]].forEach(function (d) {
+      var ctl = d[2] ? el("textarea") : el("input");
+      if (!d[2]) ctl.type = "text";
+      ctl.id = "ed-" + d[0];
+      ctl.maxLength = d[3];
+      ctl.value = e[d[0]] || "";
+      inputs[d[0]] = ctl;
+      var lab = el("label", null, d[1]);
+      lab.htmlFor = ctl.id;
+      f.append(el("div", "field", lab, ctl));
+    });
+    f.append(el("div", "mod-actions",
+      btn("บันทึกการแก้ไข", "primary", async function () {
+        var p = {};
+        Object.keys(inputs).forEach(function (k) { p[k] = inputs[k].value.trim(); });
+        if (!p.title || !p.suggestion || (own && !p.why)) { toast(own ? "หัวข้อ เหตุผล และข้อเสนอแนะต้องไม่ว่าง" : "หัวข้อและข้อเสนอแนะต้องไม่ว่าง"); return; }
+        state.editing = null;
+        if (own) {
+          try { await api("editOwn", { id: e.id, fields: p }); toast("บันทึกแล้ว ข้อเสนอรอผู้ดูแลตรวจอีกครั้ง"); }
+          catch (er) { toast(errText(er)); }
+          await refresh(true);
+        }
+        else await modOp(e.id, "edit", { fields: p }, "บันทึกการแก้ไขแล้ว");
+      }),
+      btn("ยกเลิก", "", function () { state.editing = null; render(); })));
+    return f;
+  }
+  function modCard(e) {
+    var t = TYPES[e.type] ? e.type : "W", rej = e.status === "rejected";
+    var c = el("article", "card");
+    c.append(el("div", "card-head", el("span", "chip t-" + t, t + " " + TYPES[t].name), el("span", null, (rej ? "ปฏิเสธแล้ว · " : "รอตรวจ · ") + fmtDate(e.createdAt))));
+    if (state.editing === e.id) { c.append(editForm(e)); return c; }
+    c.append(el("h3", "card-title", e.title));
+    c.append(el("p", "meta", [e.unit, e.role].filter(Boolean).join(" · ") + " · ผู้เสนอ: " + (e.name || "ไม่ระบุชื่อ") + (e.urgency ? " · เร่งด่วน " + e.urgency + "/5" : "")));
+    var dl = el("dl");
+    [["เกิดอะไรขึ้น", e.detail], ["หลักฐานหรือตัวอย่างจริง", e.evidence], ["ทำไมจึงเป็น " + TYPES[t].name, e.why],
+     ["ผลกระทบ", e.impact], ["ข้อเสนอแนะ", e.suggestion], ["สิ่งที่ต้องการสนับสนุน", e.support]]
+      .filter(function (r) { return r[1]; })
+      .forEach(function (r) { dl.append(el("dt", null, r[0]), el("dd", null, r[1])); });
+    c.append(el("div", "more", dl));
+    if (rej && e.modNote) c.append(el("p", "meta", "เหตุผลที่ปฏิเสธ: " + e.modNote));
+    var acts = el("div", "mod-actions");
+    acts.append(btn("อนุมัติและขึ้นกระดาน", "primary", function () { modOp(e.id, "approve", {}, "อนุมัติแล้ว ขึ้นกระดานเรียบร้อย"); }));
+    acts.append(btn("แก้ไขข้อความ", "", function () { state.editing = e.id; render(); }));
+    if (!rej) {
+      var note = el("input");
+      note.type = "text"; note.id = "note-" + e.id; note.maxLength = 200;
+      note.placeholder = "เหตุผลที่ปฏิเสธ (ไม่บังคับ)";
+      note.setAttribute("aria-label", "เหตุผลที่ปฏิเสธ");
+      acts.append(note, btn("ปฏิเสธ", "danger", function () { modOp(e.id, "reject", { note: note.value.trim().slice(0, 200) }, "ปฏิเสธแล้ว"); }));
+    }
+    if (state.pendingDelete === e.id) {
+      acts.append(btn("ยืนยันลบ", "danger", function () { delEntry(e.id); }), btn("ยกเลิก", "", function () { state.pendingDelete = null; render(); }));
+    } else {
+      acts.append(btn("ลบ", "", function () { state.pendingDelete = e.id; render(); }));
+    }
+    c.append(acts);
+    return c;
+  }
+  function renderMod() {
+    var box = $("modList");
+    box.replaceChildren();
+    var pend = queue.filter(function (e) { return e.status !== "rejected"; }).sort(function (a, b) { return (a.createdAt || 0) - (b.createdAt || 0); });
+    var rej = queue.filter(function (e) { return e.status === "rejected"; }).sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+    $("modCount").textContent = pend.length;
+    $("modCount").hidden = !pend.length;
+    if (!isAdmin) return;
+    box.append(el("h2", "mod-title", "รอตรวจ (" + pend.length + ")"));
+    if (!pend.length) box.append(el("div", "empty", "ไม่มีข้อเสนอรอตรวจ ข้อเสนอใหม่จะปรากฏที่นี่ภายใน 30 วินาทีหลังพนักงานส่ง"));
+    else { var g = el("div", "mod-grid"); pend.forEach(function (e) { g.append(modCard(e)); }); box.append(g); }
+    if (rej.length) {
+      box.append(el("h2", "mod-title", "ปฏิเสธแล้ว (" + rej.length + ")"));
+      var g2 = el("div", "mod-grid"); rej.forEach(function (e) { g2.append(modCard(e)); }); box.append(g2);
+    }
+  }
+
+  /* ---------- สรุป ---------- */
+  function renderSummary() {
+    $("unitPanel").hidden = !isAdmin; // สรุปตามหน่วยงานเห็นเฉพาะผู้ดูแล
+    var total = entries.length, unitsSeen = {};
+    entries.forEach(function (e) { if (e.unit) unitsSeen[e.unit] = true; });
+    var st = $("stats"); st.replaceChildren();
+    var tiles = [[total, "ข้อเสนอทั้งหมด"], [voters, "คนที่ร่วมโหวต"]];
+    if (isAdmin) tiles.push([Object.keys(unitsSeen).length, "หน่วยงานที่ร่วมเสนอ"]);
+    tiles.forEach(function (p) {
+      st.append(el("div", null, el("b", null, p[0]), el("span", null, p[1])));
+    });
+    var counts = { S: 0, W: 0, O: 0, T: 0 };
+    entries.forEach(function (e) { if (counts[e.type] !== undefined) counts[e.type]++; });
+    var max = Math.max(1, counts.S, counts.W, counts.O, counts.T);
+    var bars = $("bars"); bars.replaceChildren();
+    ORDER.forEach(function (T) {
+      var fill = el("div", "fill f-" + T); fill.style.width = (counts[T] / max * 100) + "%";
+      bars.append(el("div", "bar", el("span", null, T + " " + TYPES[T].name), el("div", "track", fill), el("span", "n", counts[T])));
+    });
+    var top = entries.filter(function (e) { return e.vc > 0; }).sort(function (a, b) { return avgOf(b) - avgOf(a) || b.vc - a.vc; }).slice(0, 5);
+    var tl = $("toplist"); tl.replaceChildren();
+    if (!top.length) tl.append(el("li", "muted", "ยังไม่มีการโหวต เปิดแท็บกระดานแล้วให้คะแนนความสำคัญ 1 ถึง 5 ได้เลย"));
+    top.forEach(function (e) {
+      tl.append(el("li", null, el("span", "chip t-" + e.type, e.type), el("p", null, e.title, isAdmin && e.unit ? el("br") : null, isAdmin && e.unit ? el("small", null, e.unit) : null), el("span", "sc-v", avgOf(e).toFixed(1))));
+    });
+    var tbl = $("unitTable"); tbl.replaceChildren();
+    var byUnit = {};
+    entries.forEach(function (e) {
+      var u = e.unit || "ไม่ระบุ";
+      byUnit[u] = byUnit[u] || { S: 0, W: 0, O: 0, T: 0, n: 0 };
+      if (byUnit[u][e.type] !== undefined) byUnit[u][e.type]++;
+      byUnit[u].n++;
+    });
+    tbl.append(el("thead", null, el("tr", null, el("th", null, "หน่วยงาน"), el("th", null, "S"), el("th", null, "W"), el("th", null, "O"), el("th", null, "T"), el("th", null, "รวม"))));
+    var body = el("tbody");
+    Object.keys(byUnit).sort(function (a, b) { return byUnit[b].n - byUnit[a].n; }).forEach(function (u) {
+      var r = byUnit[u];
+      body.append(el("tr", null, el("td", null, u), el("td", null, r.S), el("td", null, r.W), el("td", null, r.O), el("td", null, r.T), el("td", null, r.n)));
+    });
+    if (!total) body.append(el("tr", null, el("td", null, "ยังไม่มีข้อมูล"), el("td"), el("td"), el("td"), el("td"), el("td")));
+    tbl.append(body);
+    var missing = UNITS.filter(function (u) { return !unitsSeen[u]; });
+    $("coverage").textContent = total && missing.length ? "ยังไม่มีข้อเสนอจาก: " + missing.join(", ") : (total ? "ทุกหน่วยงานในรายการมีข้อเสนอแล้ว" : "");
+    $("exportRow").hidden = !(isAdmin && total);
+  }
+
+  /* ---------- สรุปทุกข้อเสนอ: หัวข้อ / เหตุผล / ข้อเสนอแนะ ---------- */
+  function renderBrief() {
+    var box = $("brief");
+    box.replaceChildren();
+    if (!entries.length) { box.append(el("div", "empty", loaded ? "ยังไม่มีข้อเสนอบนกระดาน" : "กำลังโหลดข้อเสนอ")); return; }
+    ORDER.forEach(function (T) {
+      var col = entries.filter(function (e) { return e.type === T; }).sort(function (a, b) {
+        return avgOf(b) - avgOf(a) || (b.vc || 0) - (a.vc || 0) || (b.createdAt || 0) - (a.createdAt || 0);
+      });
+      if (!col.length) return;
+      var g = el("section", "brief-group bg-" + T);
+      g.append(el("h3", "brief-title", el("span", "chip t-" + T, T + " " + TYPES[T].name), col.length + " ข้อเสนอ"));
+      g.append(el("div", "brief-row brief-head", el("div", null, "หัวข้อ (สรุปเป็นประโยคเดียว)"), el("div", null, TYPES[T].why), el("div", null, TYPES[T].sug)));
+      if (isAdmin) { g.lastChild.append(el("div", null, "จัดการ")); g.lastChild.classList.add("has-act"); }
+      col.forEach(function (e) {
+        g.append(el("div", "brief-row",
+          el("div", "bc bc-title", el("span", "lab", "หัวข้อ"), e.title),
+          el("div", "bc", el("span", "lab", "เหตุผล"), e.why || "-"),
+          el("div", "bc", el("span", "lab", "ข้อเสนอแนะ"), e.suggestion || "-")));
+        if (isAdmin) {
+          var row = g.lastChild, bt = el("div", "bc bc-act");
+          if (state.pendingDelete === e.id) bt.append(btn("ยืนยันลบ", "danger", function () { delEntry(e.id); }), btn("ยกเลิก", "", function () { state.pendingDelete = null; render(); }));
+          else bt.append(btn("ลบ", "", function () { state.pendingDelete = e.id; render(); }));
+          row.append(bt); row.classList.add("has-act");
+        }
+      });
+      box.append(g);
+    });
+  }
+
+  /* ---------- ฟอร์ม ---------- */
+  function currentType() { var r = document.querySelector('input[name="type"]:checked'); return r ? r.value : ""; }
+  function pickType(T) {
+    var r = document.querySelector('input[name="type"][value="' + T + '"]');
+    if (r) { r.checked = true; applyType(); }
+  }
+  function applyType() {
+    var T = currentType(), g = $("guide");
+    if (!T) { g.hidden = true; $("example").textContent = ""; return; }
+    var d = TYPES[T];
+    g.hidden = false;
+    g.className = "guide g-" + T;
+    g.replaceChildren(el("p", null, el("b", null, T + " " + d.name + " "), d.ask));
+    $("example").textContent = d.ex;
+    $("l-why").replaceChildren(document.createTextNode(d.why + " "), el("span", "req", "*"));
+    $("l-sug").replaceChildren(document.createTextNode(d.sug + " "), el("span", "req", "*"));
+  }
+  function showFormError(msg) { var p = $("formError"); p.textContent = msg; p.hidden = !msg; }
+  function val(id, max) { return $(id).value.trim().slice(0, max || 1500); }
+
+  async function submit(ev) {
+    ev.preventDefault();
+    showFormError("");
+    var T = currentType();
+    var title = val("i-title", 140), unit = $("i-unit").value, why = val("i-why"), sug = val("i-sug");
+    if (!T) return showFormError("เลือกประเภท S, W, O หรือ T ก่อน");
+    if (!title) return showFormError("กรอกหัวข้อสั้น ๆ หนึ่งประโยค");
+    if (!unit) return showFormError("เลือกหน่วยงานของคุณ");
+    if (!why) return showFormError("บอกเหตุผลว่าทำไมจึงเป็นประเภทนี้");
+    if (!sug) return showFormError("เขียนข้อเสนอแนะว่าจะแก้ไขหรือต่อยอดอย่างไร");
+    if (!configured) return showFormError("หน้านี้ยังไม่ได้เชื่อมต่อกับ Google Sheets");
+    var u = document.querySelector('input[name="urgency"]:checked');
+    var entry = {
+      type: T, title: title, unit: unit, role: $("i-role").value, detail: val("i-detail"), evidence: val("i-evidence"),
+      why: why, impact: val("i-impact"), suggestion: sug, support: val("i-support", 800),
+      urgency: u ? Number(u.value) : 3, name: val("i-name", 80)
+    };
+    if (!ownerToken) { ownerToken = "o" + rnd(); sset("localStorage", "swot_owner", ownerToken); }
+    var b = $("submitBtn"); b.disabled = true;
+    try {
+      var r = await api("submit", { entry: entry });
+      $("form").reset();
+      var c = document.querySelector('input[name="type"]:checked'); if (c) c.checked = false;
+      applyType();
+      toast(r.status === "approved" ? "ส่งข้อเสนอแล้ว ขึ้นกระดานทันที" : "ส่งข้อเสนอแล้ว รอผู้ดูแลตรวจก่อนขึ้นกระดาน");
+      state.unit = ""; $("f-unit").value = ""; state.q = ""; $("f-q").value = "";
+      setTab("board");
+      await refresh(true);
+    } catch (e) { showFormError(errText(e)); }
+    b.disabled = false;
+  }
+
+  /* ---------- คำสั่งที่เขียนข้อมูล ---------- */
+  function castVote(id, n) {
+    if (!configured) return;
+    var next = Object.assign({}, myScores), score = n;
+    if (next[id] === n) { delete next[id]; score = 0; } else next[id] = n;
+    myScores = next;
+    render();
+    voteChain = voteChain.then(function () { return api("vote", { entryId: id, score: score }); })
+      .then(function () { return refresh(true); })
+      .catch(function (e) { toast(errText(e)); return refresh(true); });
+  }
+  async function delEntry(id) {
+    state.pendingDelete = null;
+    try {
+      if (!isAdmin) return;
+      await api("mod", { op: "delete", id: id });
+      toast("ลบข้อเสนอแล้ว");
+    } catch (e) { toast(errText(e)); }
+    await refresh(true);
+  }
+  async function delOwn(id) {
+    state.pendingDelete = null;
+    try { await api("deleteOwn", { id: id }); toast("ลบข้อเสนอของคุณแล้ว"); }
+    catch (e) { toast(errText(e)); }
+    await refresh(true);
+  }
+  async function modOp(id, op, extra, msg) {
+    try { await api("mod", Object.assign({ op: op, id: id }, extra)); if (msg) toast(msg); }
+    catch (e) { toast(errText(e)); }
+    await refresh(true);
+  }
+
+  /* ---------- ส่งออก CSV (ผู้ดูแล) ---------- */
+  function csvCell(v) {
+    var s = v === null || v === undefined ? "" : String(v);
+    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  function exportCsv() {
+    var head = ["ประเภท", "หัวข้อ", "หน่วยงาน", "กลุ่มตำแหน่ง", "รายละเอียด", "หลักฐาน", "เหตุผล", "ผลกระทบ", "ข้อเสนอแนะ", "สิ่งที่ต้องการสนับสนุน",
+      "ความเร่งด่วน (ผู้เสนอ)", "คะแนนเฉลี่ยจากการโหวต", "จำนวนโหวต", "ชื่อผู้เสนอ", "วันที่เสนอ"];
+    var rows = [head].concat(entries.slice().sort(cmp).map(function (e) {
+      return [e.type + " " + (TYPES[e.type] ? TYPES[e.type].name : ""), e.title, e.unit, e.role, e.detail, e.evidence, e.why, e.impact, e.suggestion, e.support,
+        e.urgency, e.vc ? avgOf(e).toFixed(2) : "", e.vc || 0, e.name || "", e.createdAt ? new Date(e.createdAt).toISOString().slice(0, 10) : ""];
+    }));
+    var text = "﻿" + rows.map(function (r) { return r.map(csvCell).join(","); }).join("\r\n");
+    var url = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
+    var a = document.createElement("a");
+    a.href = url; a.download = "swot-ข้อเสนอพนักงาน.csv";
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  }
+
+  /* ---------- ผู้ดูแล: เข้าและออกจากระบบ ---------- */
+  function renderAdminUi() {
+    $("tab-mod").hidden = !isAdmin;
+    $("f-unit-wrap").hidden = !isAdmin; // ตัวกรองหน่วยงานใช้ได้เฉพาะผู้ดูแล
+    if (!isAdmin && state.unit) { state.unit = ""; $("f-unit").value = ""; }
+    $("adminToggle").textContent = isAdmin ? "ออกจากระบบผู้ดูแล" : "ผู้ดูแลระบบ";
+    if (isAdmin) $("adminBox").hidden = true;
+    if (!isAdmin && state.tab === "mod") setTab("board");
+  }
+  async function adminLogin(ev) {
+    ev.preventDefault();
+    var k = $("a-key").value;
+    var m = $("a-msg"); m.hidden = true;
+    if (!k) { m.textContent = "กรอกรหัสผู้ดูแล"; m.hidden = false; return; }
+    if (!configured) { m.textContent = "ยังไม่ได้เชื่อมต่อกับ Google Sheets"; m.hidden = false; return; }
+    $("a-go").disabled = true;
+    adminKey = k;
+    sset("sessionStorage", "swot_admin", k);
+    await refresh(true);
+    $("a-go").disabled = false;
+    if (isAdmin) { $("a-key").value = ""; toast("เข้าสู่ระบบผู้ดูแลแล้ว"); setTab("mod"); }
+    else { m.textContent = connErr ? "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้" : "รหัสไม่ถูกต้อง"; m.hidden = false; }
+  }
+  function adminToggle() {
+    if (isAdmin) {
+      adminKey = ""; sdel("sessionStorage", "swot_admin"); isAdmin = false; queue = [];
+      refresh(true); render();
+    } else {
+      var box = $("adminBox");
+      box.hidden = !box.hidden;
+      if (!box.hidden) $("a-key").focus();
+    }
+  }
+
+  /* ---------- วาดหน้า ---------- */
+  function render() {
+    renderAdminUi();
+    renderLive();
+    var ae = document.activeElement;
+    var typingOwn = ae && (ae.tagName === "INPUT" || ae.tagName === "TEXTAREA") && ae.closest && ae.closest(".own-edit");
+    if (!typingOwn) { renderBoard(); renderMine(); }
+    var typing = ae && $("modList").contains(ae) && (ae.tagName === "INPUT" || ae.tagName === "TEXTAREA");
+    if (!typing) renderMod();
+    renderSummary(); renderBrief();
+    $("submitBtn").disabled = !configured;
+    $("setupBanner").hidden = configured;
+  }
+
+  /* ---------- เริ่มต้น ---------- */
+  function boot() {
+    fillSelect($("f-unit"), UNITS, "ทุกหน่วยงาน");
+    fillSelect($("i-unit"), UNITS, "เลือกหน่วยงาน");
+    fillSelect($("i-role"), ROLES, "ไม่ระบุ");
+    document.querySelectorAll(".tab").forEach(function (b) { b.addEventListener("click", function () { setTab(b.dataset.tab); }); });
+    $("f-unit").addEventListener("change", function (e) { state.unit = e.target.value; render(); });
+    $("f-sort").addEventListener("change", function (e) { state.sort = e.target.value; render(); });
+    $("f-q").addEventListener("input", function (e) { state.q = e.target.value.trim(); render(); });
+    $("typepick").addEventListener("change", applyType);
+    $("form").addEventListener("submit", submit);
+    $("exportBtn").addEventListener("click", exportCsv);
+    $("adminForm").addEventListener("submit", adminLogin);
+    $("adminToggle").addEventListener("click", adminToggle);
+    setTab("board");
+    render();
+    refresh(true);
+    setInterval(function () { if (!document.hidden) refresh(false); }, POLL_MS);
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(false); });
+  }
+  boot();
+})();
+</script>
+</body>
+</html>
